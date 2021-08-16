@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal" >
+
+    <CheckBox
+        android:id="@+id/cb_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="On"
+        />
+    <CheckBox
+        android:id="@+id/cb_green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="red light"
+        />
+    <CheckBox
+        android:id="@+id/cb_blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="red light"
+        />
+</LinearLayout>
+

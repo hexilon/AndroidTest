@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AndroidTest</string>
+    <string name="camera">Camera</string>
+    <string name="uart">Uart</string>
+    <string name="baud_rate">Baud rate</string>
+    <string name="uart_test_prompt">Please connect the RX and TX of the uart</string>
+    <string name="uart_test">Test</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="feature">System Feature</string>
+    <string name="indicator_light">Indicator Light</string>
+</resources>

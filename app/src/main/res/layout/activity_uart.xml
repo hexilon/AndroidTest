@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/uart_test_prompt"
+        android:textSize="22sp"
+        android:textColor="@android:color/holo_red_dark"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:text="@string/uart"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/spinner_serial_port"
+            android:minWidth="180dp"
+            android:minHeight="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical" >
+        <TextView
+            android:text="@string/baud_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/spinner_baud_rate"
+            android:layout_width="wrap_content"
+            android:minWidth="180dp"
+            android:minHeight="48dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/baud_rate_array"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_test"
+        android:text="@string/uart_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"/>
+
+    <!--ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="100dp" -->
+    <TextView
+        android:id="@+id/tv_log"
+        android:gravity="top"
+        android:background = "#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="100dp"
+        android:singleLine="false"
+        android:scrollbars="vertical" />
+    <!--/ScrollView-->
+</LinearLayout>
