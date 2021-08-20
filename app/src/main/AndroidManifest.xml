@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.SYSTEM_CAMERA"/>
     <uses-permission android:name="android.permission.SERIAL_PORT"/>
 
     <application
@@ -23,9 +24,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CameraActivity">
+        <activity android:name=".API1CameraActivity">
             <meta-data android:name="test_item"
-                android:value="@string/camera" />
+                android:value="@string/camera_api1" />
+        </activity>
+
+        <activity android:name=".API2CameraActivity">
+            <meta-data android:name="test_item"
+                android:value="@string/camera_api2" />
         </activity>
 
         <activity android:name=".UartActivity">

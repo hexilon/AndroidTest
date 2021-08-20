@@ -31,16 +31,23 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.databinding.DataBindingUtil;
+
+import com.hexon.androidtest.databinding.ActivityCameraBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CameraActivity extends Activity implements SurfaceHolder.Callback {
-    private static final String TAG = CameraActivity.class.getSimpleName();
+public class API2CameraActivity extends Activity implements SurfaceHolder.Callback {
+    private static final String TAG = API2CameraActivity.class.getSimpleName();
+    ActivityCameraBinding mBinding;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder = null;
     CameraManager mManager;
+    private String mCameraBackId;
+    private String mCameraFrontId;
+    private String mCurrCameraId;
     private CameraDevice mCameraDevice;
     private CameraCaptureSession mCaptureSession;
     private ImageReader mCaptureImageReader;
@@ -80,27 +87,68 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_camera);
         mSurfaceView = (SurfaceView) findViewById(R.id.surface_camera);
         mManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         mCameraThread = new HandlerThread("OneCamera2");
         mCameraThread.start();
         mCameraHandler = new Handler(mCameraThread.getLooper());
-        Button btnCapture = findViewById(R.id.btn_captrue);
-        btnCapture.setOnClickListener(new View.OnClickListener() {
+
+        initView();
+        initCamera();
+    }
+
+    private void initView() {
+        mBinding.btnCaptrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 takePicture();
             }
         });
+
+        mBinding.btnSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurrCameraId.equals(mCameraBackId)) {
+                    mCurrCameraId = mCameraFrontId;
+                } else {
+                    mCurrCameraId = mCameraBackId;
+                }
+                openCamera();
+            }
+        });
     }
+
+    private void initCamera() {
+        try {
+            String[] ids = mManager.getCameraIdList();
+
+            for (String id : ids) {
+                CameraCharacteristics characteristics = mManager.getCameraCharacteristics(id);
+                int face = characteristics.get(CameraCharacteristics.LENS_FACING);
+                String info = characteristics.get(CameraCharacteristics.INFO_VERSION);
+                Log.d(TAG, "info:" + info);
+                if (face == CameraMetadata.LENS_FACING_FRONT) {
+                    Log.d(TAG, id + " is front camera");
+                    mCameraFrontId = id;
+                } else {
+                    mCameraBackId = id;
+                }
+            }
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+
+        mCurrCameraId = mCameraBackId;
+    }
+
     private boolean checkFrontCameraExists() {
         try {
             String[] ids = mManager.getCameraIdList();
             for (String id : ids) {
                 CameraCharacteristics characteristics = mManager.getCameraCharacteristics(id);
                 String info = characteristics.get(CameraCharacteristics.INFO_VERSION);
-                Log.d(TAG,  "info:" + info);
+                Log.d(TAG, "info:" + info);
                 if (info.equals("2")) {
                     Log.d(TAG, id + " is back Auxiliary camera");
                     return true;
@@ -156,38 +204,19 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
             return;
         }
         try {
-            String[] ids = mManager.getCameraIdList();
-            String cameraId = null;
-            for (String id : ids) {
-                CameraCharacteristics characteristics = mManager.getCameraCharacteristics(id);
-                int face = characteristics.get(CameraCharacteristics.LENS_FACING);
-                String info = characteristics.get(CameraCharacteristics.INFO_VERSION);
-                Log.d(TAG,  "info:" + info);
-                if (face == CameraMetadata.LENS_FACING_FRONT) {
-                    Log.d(TAG, id + " is front camera");
-                    cameraId = id;
-                    StreamConfigurationMap map = characteristics.get(
-                            CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-                    Size[] sizes = map.getOutputSizes(ImageFormat.JPEG);
-                    DisplayMetrics dm = getResources().getDisplayMetrics();
-                    mPreviewSize = getOptimalPreviewSize(Arrays.asList(sizes.clone()), dm.widthPixels, dm.heightPixels);
-                    Log.d(TAG, "mPreviewSize:" + mPreviewSize);
-                    mHolder.setFixedSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-                    break;
-                }
-//
-//                if (info.equals("2")) {
-//                    Log.d(TAG, id + " is back Auxiliary camera");
-//                    cameraId = id;
-//                    break;
-//                }
-
-            }
-
-            if (cameraId == null) {
+            if (mCurrCameraId == null) {
                 return;
             }
-            mManager.openCamera(cameraId, new CameraDevice.StateCallback() {
+            CameraCharacteristics characteristics = mManager.getCameraCharacteristics(mCurrCameraId);
+            String info = characteristics.get(CameraCharacteristics.INFO_VERSION);
+            StreamConfigurationMap map = characteristics.get(
+                    CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            Size[] sizes = map.getOutputSizes(ImageFormat.JPEG);
+            DisplayMetrics dm = getResources().getDisplayMetrics();
+            mPreviewSize = getOptimalPreviewSize(Arrays.asList(sizes.clone()), dm.widthPixels, dm.heightPixels);
+            Log.d(TAG, "mPreviewSize:" + mPreviewSize);
+            mHolder.setFixedSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            mManager.openCamera(mCurrCameraId, new CameraDevice.StateCallback() {
                 @Override
                 public void onOpened(@NonNull CameraDevice camera) {
                     Log.d(TAG, "opened");
