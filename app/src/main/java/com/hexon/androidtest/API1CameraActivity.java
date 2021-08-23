@@ -17,6 +17,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.hexon.androidtest.databinding.ActivityCameraBinding;
 
+import java.util.List;
+import java.util.Objects;
+
 public class API1CameraActivity extends Activity implements SurfaceHolder.Callback {
     private static final String TAG = API1CameraActivity.class.getSimpleName();
     private static final int MSG_START_PREVIEW = 1;
@@ -104,16 +107,37 @@ public class API1CameraActivity extends Activity implements SurfaceHolder.Callba
             setCameraDisplayOrientation(mCameraId, mCamera);
             if (mCamera != null) {
                 try {
+                    Camera.Parameters parameters = mCamera.getParameters();
+                    List<String> focusModeList = parameters.getSupportedFocusModes();
+                    for (String focusMode : focusModeList){//检查支持的对焦
+                        Log.d(TAG, "focusMode:" + focusMode);
+                        if (focusMode.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)){
+                            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+                        }else if (focusMode.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)){
+                            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                        } else if (focusMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                        }
+                    }
+                    mCamera.setParameters(parameters);
                     mCamera.setPreviewDisplay(mHolder);
                     Log.d(TAG, "start preview");
                     mCamera.startPreview();
+                    mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                        @Override
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            Log.d(TAG, "onAutoFocus " + success);
+                        }
+                    });
                 } catch (Exception e) {
                     mCamera.release();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mCamera.release();
+            if (mCamera != null) {
+                mCamera.release();
+            }
             mCamera = null;
             Toast.makeText(this, "Camera " + mCameraId + "Open fail!", Toast.LENGTH_SHORT).show();
         }
@@ -151,6 +175,9 @@ public class API1CameraActivity extends Activity implements SurfaceHolder.Callba
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-
+        Log.d(TAG, "surfaceDestroyed");
+        if (mCamera != null) {
+            mCamera.release();
+        }
     }
 }

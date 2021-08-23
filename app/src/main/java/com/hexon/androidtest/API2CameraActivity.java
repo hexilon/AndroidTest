@@ -131,7 +131,7 @@ public class API2CameraActivity extends Activity implements SurfaceHolder.Callba
                 if (face == CameraMetadata.LENS_FACING_FRONT) {
                     Log.d(TAG, id + " is front camera");
                     mCameraFrontId = id;
-                } else {
+                } else if (id.equals("0") && face == CameraMetadata.LENS_FACING_BACK) {
                     mCameraBackId = id;
                 }
             }
@@ -183,7 +183,6 @@ public class API2CameraActivity extends Activity implements SurfaceHolder.Callba
     @Override
     protected void onPause() {
         super.onPause();
-        closeCamera();
     }
 
     @Override
@@ -203,6 +202,11 @@ public class API2CameraActivity extends Activity implements SurfaceHolder.Callba
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+        if (mCameraDevice != null) {
+            mCameraDevice.close();
+        }
+
         try {
             if (mCurrCameraId == null) {
                 return;
@@ -348,7 +352,7 @@ public class API2CameraActivity extends Activity implements SurfaceHolder.Callba
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-
+        closeCamera();
     }
 
     private boolean repeatingPreview() {
