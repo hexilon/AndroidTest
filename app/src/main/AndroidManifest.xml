@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hexon.androidtest">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.SYSTEM_CAMERA"/>
-    <uses-permission android:name="android.permission.SERIAL_PORT"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SYSTEM_CAMERA" />
+    <uses-permission android:name="android.permission.SERIAL_PORT" />
 
     <application
         android:allowBackup="true"
@@ -25,26 +27,36 @@
         </activity>
 
         <activity android:name=".API1CameraActivity">
-            <meta-data android:name="test_item"
+            <meta-data
+                android:name="test_item"
                 android:value="@string/camera_api1" />
         </activity>
 
         <activity android:name=".API2CameraActivity">
-            <meta-data android:name="test_item"
+            <meta-data
+                android:name="test_item"
                 android:value="@string/camera_api2" />
         </activity>
 
         <activity android:name=".UartActivity">
-            <meta-data android:name="test_item"
+            <meta-data
+                android:name="test_item"
                 android:value="@string/uart" />
         </activity>
         <activity android:name=".FeatureActivity">
-            <meta-data android:name="test_item"
+            <meta-data
+                android:name="test_item"
                 android:value="@string/feature" />
         </activity>
-        <activity android:name=".IndicatorLightTestActivity" >
-            <meta-data android:name="test_item"
+        <activity android:name=".IndicatorLightTestActivity">
+            <meta-data
+                android:name="test_item"
                 android:value="@string/indicator_light" />
+        </activity>
+        <activity android:name=".VibratorActivity">
+            <meta-data
+                android:name="test_item"
+                android:value="@string/vibrator" />
         </activity>
     </application>
 

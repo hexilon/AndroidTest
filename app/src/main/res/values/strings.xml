@@ -13,4 +13,6 @@
     <string name="indicator_light">Indicator Light</string>
     <string name="capture">Capture</string>
     <string name="camera_switch">Switch</string>
+    <string name="not_supported">Not supported</string>
+    <string name="vibrator">Vibrator</string>
 </resources>

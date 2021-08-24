@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         public void setItemPosition(int position) {
             TextView textView = itemView.findViewById(R.id.tv_number);
-            textView.setText(Integer.toString(position));
+            textView.setText(Integer.toString(position+1));
         }
     }
 }
